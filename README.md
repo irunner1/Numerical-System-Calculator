@@ -8,3 +8,4 @@
     <img src="https://user-images.githubusercontent.com/90857526/156994008-11a79fe7-de34-41f2-bf18-56a6485f3e6a.png" alt="Скриншот" width="300"/>
 </p>
 
+## <a href="https://drive.google.com/file/d/1mHhyRS22vULQ_cp0WaCMNp6gVelcvo8G/view?usp=sharing" download="">.apk</a> ##
