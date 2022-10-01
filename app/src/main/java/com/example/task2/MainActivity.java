@@ -21,15 +21,11 @@ import java.math.BigInteger;
 import static java.lang.Math.pow;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btnConvert;
     private TextView txtRes;
     private EditText inputNum;
     public String inputSysFrom;
     private String inputSysTo;
-    private EditText txt;
     public int position = 0;
-    private boolean pointCounter = false;
-    public String result = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initViews() {
-        btnConvert = (Button) findViewById(R.id.btnConvert);
+        Button btnConvert = (Button) findViewById(R.id.btnConvert);
         txtRes = (TextView) findViewById(R.id.txtRes);
         inputNum = (EditText) findViewById(R.id.inputNum);
 
@@ -109,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     findViewById(R.id.btnB).setEnabled(false);
                     findViewById(R.id.btnC).setEnabled(false);
                 }
-
             }
 
             @Override
@@ -162,17 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void symClick(View view) {
-        Button button = (Button)view;
-        if (position > 0) {
-            if (!pointCounter) {
-                inputNum.setText(inputNum.getText() + ".");
-                pointCounter = true;
-            }
-            else inputNum.setText(inputNum.getText() + "");
-        }
-    }
-
     public void onSymbolClick(View view) {
         Button button = (Button)view;
         String op = button.getText().toString();
@@ -188,9 +172,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onDeleteClick(View view) {
         if (inputNum.length() > 0) {
             String op = inputNum.getText().toString();
-            if (op.indexOf(".") != -1) {
-                pointCounter = false;
-            }
             op = deleteCharacters(op, op.length() - 1, op.length());
             inputNum.setText(op);
             position--;
@@ -200,258 +181,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public int TMP(int Value, int System) {
-        int a = Value, tmp = 0, b;
-        while (a > System - 1) {
-            b = a % System;
-            tmp++;
-            a /= System;
-        }
-        tmp++;
-        return tmp;
-    }
-
-    public int SysConTo10(char str[], int sys) {
-        int k, res = 0, st = 0;
-        int len = str.length;
-        for (int i = len - 1; i >= 0; i--) {
-            switch (str[i]) {
-                case 'A': k = 10;
-                    break;
-                case 'B': k = 11;
-                    break;
-                case 'C': k = 12;
-                    break;
-                case 'D': k = 13;
-                    break;
-                case 'E': k = 14;
-                    break;
-                case 'F': k = 15;
-                    break;
-                default: k = (int)str[i];
-                    break;
-            }
-            if (k >= 48) {
-                k -= 48;
-            }
-            if (k >= sys) {
-                break;
-            }
-            else if (k != sys) {
-                res += pow(sys, st) * k;
-                st++;
-            }
-        }
-        return res;
-    }
-
-
-    public static String translation(String str) {
-        switch (str) {
-            case "10": {
-                str = "A";
-                break;
-            }
-            case "11": {
-                str = "B";
-                break;
-            }
-            case "12": {
-                str = "C";
-                break;
-            }
-            case "13": {
-                str = "D";
-                break;
-            }
-            case "14": {
-                str = "E";
-                break;
-            }
-            case "15": {
-                str = "F";
-                break;
-            }
-            default: { break; }
-        }
-        return str;
-    }
-
-    public void transition(float a, int sysTo) {
-        int left = (int) a;
-        boolean divideOneMoreTime = left >= 1;
-        String bin = "", tmp = "", res = "";
-        while (divideOneMoreTime) {
-            bin = left % sysTo + bin;
-            if (sysTo == 16) {
-                tmp += left % 16;
-                res = translation(tmp) + res;
-                tmp = "";
-            }
-
-            left /= sysTo;
-            if (left < 1) {
-                divideOneMoreTime = false;
-            }
-        }
-        bin += ".";
-        res += ".";
-
-        float right = (float) a - (int) a;
-        for (int i = 0; i < 20; i++) {
-            right = right * sysTo - (int) right * sysTo;
-            bin = bin + (int) right;
-            if (sysTo == 16) {
-                tmp += (int) right;
-                res = res + translation(tmp);
-                tmp = "";
-            }
-            if (right == 1.0) {
-                break;
-            }
-        }
-        if (bin.length() > 10) bin = bin.substring(0, 10);
-        if (res.length() > 10) res = res.substring(0, 10);
-        result = bin;
-        txtRes.setText(bin);
-        if (sysTo == 16) {
-            txtRes.setText(res);
-        }
-    }
-    public void transitionTo10(float a, int sysFrom) {
-        int left = (int) a;
-        int k, r = 0, st = 0;
-        boolean divideOneMoreTime = left >= 1;
-        String bin = "", tmp = "", res = "";
-
-        while (divideOneMoreTime) {
-            res += pow(sysFrom, st) * a;
-            st++;
-
-            if (left < 1) {
-                divideOneMoreTime = false;
-            }
-        }
-        bin += ".";
-
-        float right = (float) a - (int) a;
-        for (int i = 0; i < 20; i++) {
-            res += pow(sysFrom, st) * a;
-            st--;
-
-            if (right == 1.0) {
-                break;
-            }
-        }
-        if (bin.length() > 10) bin = bin.substring(0, 10);
-        result = bin;
-        txtRes.setText(bin);
-
+    public String twoToTen(int from, int to, String num) {
+        long number;
+        number = Long.parseLong(num, from);
+        return Long.toString(number, to);
     }
 
     @Override
     public void onClick(View v) {
         int sysTo = Integer.parseInt(inputSysTo);
         int sysFrom = Integer.parseInt(inputSysFrom);
-
-        if (inputNum.length() > 0) {
-            if (inputNum.getText().toString().contains(".")) {
-                if (sysFrom == sysTo) {
-                    txtRes.setText(inputNum.getText().toString());
-                }
-                else {
-                    if (sysTo == 2) {
-                        float a = Float.parseFloat(inputNum.getText().toString());
-                        transition(a, sysTo);
-                    }///
-
-                    if (sysTo == 8) {
-                        float a = Float.parseFloat(inputNum.getText().toString());
-                        transition(a, sysTo);
-                    }
-                    if (sysTo == 10) {
-//                        if (sysFrom == 2) {
-//
-//                        }
-                        float a = Float.parseFloat(inputNum.getText().toString());
-                        transition(a, sysTo);
-                    }
-                    if (sysTo == 16) {
-                        float a = Float.parseFloat(inputNum.getText().toString());
-                        transition(a, sysTo);
-                    }
-                }
-
-            }
-            else {
-                if (sysTo == 2) {
-                    if (sysFrom == 2) {
-                        result = inputNum.getText().toString();
-                    }
-                    else {
-                        int num = Integer.parseInt(inputNum.getText().toString());
-                        result = Integer.toBinaryString(num);
-                    }
-                    txtRes.setText(result);
-                }
-                else {
-                    int res = 0;
-                    String str = inputNum.getText().toString();
-                    char[] val = str.toCharArray();
-                    String tm = "";
-
-                    res = SysConTo10(val, sysFrom);
-
-                    int tmp2 = TMP(res, sysTo);
-                    for (int i = 0; i < tmp2; i++) {
-                        int b = res % sysTo;
-                        switch (b) {
-                            case 10: {
-                                val[i] = 'A';
-                                res /= sysTo;
-                            }
-                            break;
-                            case 11: {
-                                val[i] = 'B';
-                                res /= sysTo;
-                            }
-                            break;
-                            case 12: {
-                                val[i] = 'C';
-                                res /= sysTo;
-                            }
-                            break;
-                            case 13: {
-                                val[i] = 'D';
-                                res /= sysTo;
-                            }
-                            break;
-                            case 14: {
-                                val[i] = 'E';
-                                res /= sysTo;
-                            }
-                            break;
-                            case 15: {
-                                val[i] = 'F';
-                                res /= sysTo;
-                            }
-                            break;
-                            default: {
-                                if (b < 48) {
-                                    b += 48;
-                                }
-                                val[i] = (char) b;
-                                res /= sysTo;
-                            }
-                            break;
-                        }
-                    }
-                    for (int i = tmp2 - 1; i > -1; i--) {
-                        tm += val[i];
-                    }
-                    txtRes.setText(tm);
-                }
-            }
-        }
+        txtRes.setText(twoToTen(sysFrom, sysTo, inputNum.getText().toString()));
     }
 }

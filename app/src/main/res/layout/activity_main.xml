@@ -130,7 +130,7 @@
                 app:layout_constraintHorizontal_bias="0.927"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.29000002" />
+                app:layout_constraintVertical_bias="0.5" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -497,7 +497,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="visible">
 
                 <Button
                     android:id="@+id/button12"
@@ -513,6 +514,7 @@
                     android:onClick="symClick"
                     android:text="."
                     android:textSize="20sp"
+                    android:visibility="invisible"
                     app:cornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn0"
